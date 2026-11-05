@@ -1,7 +1,11 @@
 ---
 title: "Collecting and Analyzing Social Media Data"
 author: "Francesca Giannetti"
-format: 
+format:
+  pdf:
+    toc: true
+    number-sections: true
+    colorlinks: true
   revealjs:
     slide-number: true
     incremental: true  
@@ -105,12 +109,12 @@ Here we initialize an HTTP request object in `httr2` targeting Bluesky's `create
 ```{r create_session}
 # create a session
 auth_resp <- request("https://bsky.social/xrpc/com.atproto.server.createSession") |> 
-  req_method("POST") %>%
+  req_method("POST") |> 
   req_body_json(list(
     identifier = bsky_identifier, # Your handle
     password   = bsky_app_password     # Generated in Bluesky settings
-  )) %>%
-  req_perform() %>%
+  )) |> 
+  req_perform() |> 
   resp_body_json()
 
 # Get the Access JSON Web Token (JWT)
@@ -123,7 +127,7 @@ Here are a handful of examples of queries you can perform using various API endp
 
 ## Query specific handles
 
-```{r elsayed, eval=FALSE}
+```{r elsayed_resp, eval=FALSE}
 
 # Search posts by a given author
 elsayed_req <- request("https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed") |>
@@ -132,26 +136,26 @@ elsayed_req <- request("https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthor
     limit = 10
   )
 
-elsayed_resp <- req |> req_perform() |> resp_body_json() # parse JSON response
+elsayed_resp <- elsayed_req |> req_perform() |> resp_body_json() # parse JSON response
 
 # Extract post texts
-sapply(resp$feed, function(item) item$post$record$text)
+sapply(elsayed_resp$feed, function(item) item$post$record$text)
 
 ```
 ## Fetch posts from custom feeds
 
-```{r academicsky, eval=FALSE}
+```{r academicsky_posts, eval=FALSE}
 
 # Query a custom feed generator URI
 # Example feed URI format: at://<CREATOR_DID>/app.bsky.feed.generator/<RECORD_KEY>
 # Extract creator handle and record key from the feed's share link
 academicsky_req <- request("https://public.api.bsky.app/xrpc/app.bsky.feed.getFeed") |>
   req_url_query(
-    feed = "at://did:plc:4jb3re5tvklsvhuc3lkerj5q/feed/aaak6p5s2f3cu", # Example AcademicSky feed
+    feed = "at://did:plc:4jb3re5tvklsvhuc3lkerj5q/app.bsky.feed.generator/aaak6p5s2f3cu", # Example AcademicSky feed
     limit = 20
   )
 
-academicsky_resp <- feed_req |> req_perform() |> resp_body_json()
+academicsky_resp <- academicsky_req |> req_perform() |> resp_body_json()
 
 # Extract and view post texts
 academicsky_posts <- academicsky_resp$feed
@@ -162,7 +166,7 @@ sapply(academicsky_posts, function(item) item$post$record$text)
 
 We can get these by using the `app.bsky.graph.getList` and `app.bsky.graph.getStarterPack` endpoints.
 
-```{r}
+```{r dhmakes_handles}
 # Fetch members of a curated list
 # For example, the dhmakes list published at https://bsky.app/starter-pack/literaturegeek.bsky.social/3kxucwdkvd222
 
@@ -206,7 +210,7 @@ head(dhmakes_handles)
 
 ## Query by keywords
 
-```{r eval=FALSE}
+```{r letterpress_resp, eval=FALSE}
 
 letterpress_req <- request("https://bsky.social/xrpc/app.bsky.feed.searchPosts") %>%
   req_url_query(q = 'dhmakes letterpress',
@@ -338,7 +342,7 @@ posts_with_images$image_urls[1]
 
 ## Time Series Analysis
 
-```{r}
+```{r posts_df, warning=FALSE}
 
 #install.packages("scales")
 library(scales)
@@ -395,7 +399,7 @@ Let's reflect on the type(s) of analysis needed for your social media data.
 
 You may (and should) write any new and derived data you want to keep to file. It's very easy to read it back into R to continue your work later.
 
-```{r}
+```{r eval=FALSE}
 
 # enter the name of the dataframe you wish to save and its file name
 

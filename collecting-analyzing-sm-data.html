@@ -303,10 +303,10 @@ Francesca Giannetti
 <span id="cb3-5"><a href="" aria-label="5"></a>    <span class="at">limit =</span> <span class="dv">10</span></span>
 <span id="cb3-6"><a href="" aria-label="6"></a>  )</span>
 <span id="cb3-7"><a href="" aria-label="7"></a></span>
-<span id="cb3-8"><a href="" aria-label="8"></a>elsayed_resp <span class="ot">&lt;-</span> req <span class="sc">|&gt;</span> <span class="fu">req_perform</span>() <span class="sc">|&gt;</span> <span class="fu">resp_body_json</span>() <span class="co"># parse JSON response</span></span>
+<span id="cb3-8"><a href="" aria-label="8"></a>elsayed_resp <span class="ot">&lt;-</span> elsayed_req <span class="sc">|&gt;</span> <span class="fu">req_perform</span>() <span class="sc">|&gt;</span> <span class="fu">resp_body_json</span>() <span class="co"># parse JSON response</span></span>
 <span id="cb3-9"><a href="" aria-label="9"></a></span>
 <span id="cb3-10"><a href="" aria-label="10"></a><span class="co"># Extract post texts</span></span>
-<span id="cb3-11"><a href="" aria-label="11"></a><span class="fu">sapply</span>(resp<span class="sc">$</span>feed, <span class="cf">function</span>(item) item<span class="sc">$</span>post<span class="sc">$</span>record<span class="sc">$</span>text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-11"><a href="" aria-label="11"></a><span class="fu">sapply</span>(elsayed_resp<span class="sc">$</span>feed, <span class="cf">function</span>(item) item<span class="sc">$</span>post<span class="sc">$</span>record<span class="sc">$</span>text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="fetch-posts-from-custom-feeds" class="slide level2">
@@ -317,11 +317,11 @@ Francesca Giannetti
 <span id="cb4-3"><a href="" aria-label="3"></a><span class="co"># Extract creator handle and record key from the feed's share link</span></span>
 <span id="cb4-4"><a href="" aria-label="4"></a>academicsky_req <span class="ot">&lt;-</span> <span class="fu">request</span>(<span class="st">"https://public.api.bsky.app/xrpc/app.bsky.feed.getFeed"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb4-5"><a href="" aria-label="5"></a>  <span class="fu">req_url_query</span>(</span>
-<span id="cb4-6"><a href="" aria-label="6"></a>    <span class="at">feed =</span> <span class="st">"at://did:plc:4jb3re5tvklsvhuc3lkerj5q/feed/aaak6p5s2f3cu"</span>, <span class="co"># Example AcademicSky feed</span></span>
+<span id="cb4-6"><a href="" aria-label="6"></a>    <span class="at">feed =</span> <span class="st">"at://did:plc:4jb3re5tvklsvhuc3lkerj5q/app.bsky.feed.generator/aaak6p5s2f3cu"</span>, <span class="co"># Example AcademicSky feed</span></span>
 <span id="cb4-7"><a href="" aria-label="7"></a>    <span class="at">limit =</span> <span class="dv">20</span></span>
 <span id="cb4-8"><a href="" aria-label="8"></a>  )</span>
 <span id="cb4-9"><a href="" aria-label="9"></a></span>
-<span id="cb4-10"><a href="" aria-label="10"></a>academicsky_resp <span class="ot">&lt;-</span> feed_req <span class="sc">|&gt;</span> <span class="fu">req_perform</span>() <span class="sc">|&gt;</span> <span class="fu">resp_body_json</span>()</span>
+<span id="cb4-10"><a href="" aria-label="10"></a>academicsky_resp <span class="ot">&lt;-</span> academicsky_req <span class="sc">|&gt;</span> <span class="fu">req_perform</span>() <span class="sc">|&gt;</span> <span class="fu">resp_body_json</span>()</span>
 <span id="cb4-11"><a href="" aria-label="11"></a></span>
 <span id="cb4-12"><a href="" aria-label="12"></a><span class="co"># Extract and view post texts</span></span>
 <span id="cb4-13"><a href="" aria-label="13"></a>academicsky_posts <span class="ot">&lt;-</span> academicsky_resp<span class="sc">$</span>feed</span>
@@ -505,7 +505,7 @@ Francesca Giannetti
 <span id="cb9-43"><a href="" aria-label="43"></a></span>
 <span id="cb9-44"><a href="" aria-label="44"></a>posts_with_images<span class="sc">$</span>image_urls[<span class="dv">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:quschouau47zm4f3ntsw7j5y/bafkreig5pd42vrbufgnlz2x46a3o4lemrrrbblg3xbnyex5fu2av2gx4oq; https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:quschouau47zm4f3ntsw7j5y/bafkreiaqbuywri2qguwowklkzczey3ti6deg74a65lovgpfoe4tft3guqe; https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:quschouau47zm4f3ntsw7j5y/bafkreie5nl37irjjebte36wdcxwgk54rcpr72lofkwk3iey7uerw5fhepu"</code></pre>
+<pre><code>[1] "https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:quschouau47zm4f3ntsw7j5y/bafkreic65kyfjkymmdn6gkskomsayp7nwvncjtth5l4st43o2njrllkuzy; https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:quschouau47zm4f3ntsw7j5y/bafkreieaqixevbskthki5vvspakrkli35efke6gj2pepyennjlpk56wioe; https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:quschouau47zm4f3ntsw7j5y/bafkreigashoqo7az5qvdvt5szh7qwj7lz2c42xvcsobpojacx4lwzgmidy"</code></pre>
 </div>
 </div>
 </section>
@@ -551,7 +551,7 @@ Francesca Giannetti
 <span id="cb11-37"><a href="" aria-label="37"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 </div>
-<img data-src="collecting-analyzing-sm-data_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
+<img data-src="collecting-analyzing-sm-data_files/figure-revealjs/posts_df-1.png" width="960" class="r-stretch"></section>
 <section id="activity-2" class="slide level2">
 <h2>Activity 2</h2>
 <p>Let’s reflect on the type(s) of analysis needed for your social media data.</p>
